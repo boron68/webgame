@@ -1,100 +1,112 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no">
 <title>New Year Brawl Clicker</title>
-<style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body, html {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
+<style>
+    body {
+        margin: 0;
+        padding: 0;
         font-family: Arial, sans-serif;
+        overflow: hidden;
+        background: #1e90ff;
     }
 
-    /* LOADING SCREEN */
+    /* ---------- LOADING SCREEN ---------- */
     #loadingScreen {
         position: fixed;
-        inset: 0;
-        background: #3a3a3a;
-        color: white;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: #ccc;
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 32px;
-        font-family: "Courier New", monospace;
-        animation: fadeout 0.5s ease forwards;
-        animation-delay: 2.5s;
-        z-index: 10;
+        font-size: 28px;
+        font-weight: bold;
     }
-    @keyframes fadeout { to { opacity: 0; visibility: hidden; } }
 
-    /* NICKNAME SCREEN */
-    #nameScreen {
+    /* ---------- NICKNAME SCREEN ---------- */
+    #nicknameScreen {
         position: fixed;
-        inset: 0;
-        display: flex;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: #1e90ff;
+        display: none;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        background: #1d1d1d;
         color: white;
         gap: 20px;
-        visibility: hidden;
-        opacity: 0;
-        transition: 0.5s;
-        z-index: 9;
     }
-    #nameInput { padding: 12px 18px; font-size: 18px; border-radius: 8px; border: none; outline: none; }
-    #startBtn { padding: 12px 25px; font-size: 18px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; }
+    #nicknameInput {
+        padding: 12px;
+        font-size: 20px;
+        border-radius: 10px;
+        border: none;
+        width: 70%;
+        text-align: center;
+    }
+    #startBtn {
+        padding: 12px 25px;
+        font-size: 20px;
+        border: none;
+        border-radius: 10px;
+        background: #ffcc00;
+        cursor: pointer;
+    }
 
-    /* MAIN GAME SCREEN */
+    /* ---------- GAME SCREEN ---------- */
     #gameScreen {
         position: fixed;
-        inset: 0;
-        background: #0d47a1;
-        visibility: hidden;
-        opacity: 0;
-        transition: 0.5s;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        display: none;
+        background: #1e90ff;
+        overflow: hidden;
     }
 
+    /* Nickname top-left */
     #nicknameDisplay {
         position: absolute;
-        top: 15px;
-        left: 15px;
-        font-size: 26px;
+        top: 10px;
+        left: 10px;
+        font-size: 24px;
         font-weight: bold;
         color: white;
     }
 
-    #coinBox {
+    /* Coins at top center */
+    #coinsUI {
         position: absolute;
-        top: 15px;
+        top: 10px;
         left: 50%;
         transform: translateX(-50%);
         display: flex;
         align-items: center;
         gap: 10px;
-        font-size: 28px;
-        font-weight: bold;
         color: white;
+        font-size: 26px;
+        font-weight: bold;
     }
-    #coinBox img { width: 40px; height: 40px; }
 
-    #santa {
+    /* Center clicker image */
+    #clicker {
         position: absolute;
         top: 50%;
         left: 50%;
+        width: 260px;
         transform: translate(-50%, -50%);
-        width: 230px;
-        user-select: none;
         cursor: pointer;
-        transition: transform 0.08s ease;
+        user-select: none;
+        transition: transform 0.1s ease;
+    }
+    #clicker:active {
+        transform: translate(-50%, -50%) scale(0.92);
     }
 
-    /* SOFT SNOW */
+    /* ---------- Snow ---------- */
     .snow {
         position: fixed;
         top: 0;
@@ -112,141 +124,91 @@
         font-size: 10px;
         opacity: 0.9;
         animation: fall linear infinite;
-        will-change: transform, opacity;
-        text-shadow: 0 0 6px rgba(255,255,255,0.6);
     }
 
     @keyframes fall {
         from { transform: translateY(-10px); }
         to   { transform: translateY(110vh); }
     }
-
-    /* Невеликий responsive tweak */
-    @media (max-width: 600px) {
-        #santa { width: 160px; }
-        #nicknameDisplay { font-size: 20px; }
-        #coinBox { font-size: 20px; }
-    }
 </style>
 </head>
+
 <body>
 
 <!-- LOADING -->
 <div id="loadingScreen">Loading...</div>
 
 <!-- NICKNAME -->
-<div id="nameScreen">
-    <h2 style="color:white">Enter Nickname</h2>
-    <input id="nameInput" placeholder="Your nickname" />
+<div id="nicknameScreen">
+    <h2>Enter your nickname</h2>
+    <input id="nicknameInput" placeholder="Nickname">
     <button id="startBtn">Start</button>
 </div>
 
 <!-- GAME -->
 <div id="gameScreen">
-    <div class="snow" id="snow"></div>
-
     <div id="nicknameDisplay"></div>
 
-    <div id="coinBox">
-        <img src="coin.png" alt="coin">
-        <span id="coins">0</span>
+    <div id="coinsUI">
+        <img src="coin.png" width="40">
+        <span id="coinCount">0</span>
     </div>
 
-    <img id="santa" src="tu_santa_pin.png" alt="santa pin">
+    <!-- correct central image restored -->
+    <img id="clicker" src="stu_santa_pin.png">
+
+    <div class="snow" id="snow"></div>
 </div>
 
 <script>
-    // Отримуємо елементи
-    const loadingScreen = document.getElementById('loadingScreen');
-    const nameScreen = document.getElementById('nameScreen');
-    const nameInput = document.getElementById('nameInput');
-    const startBtn = document.getElementById('startBtn');
-    const gameScreen = document.getElementById('gameScreen');
-    const nicknameDisplay = document.getElementById('nicknameDisplay');
-    const santa = document.getElementById('santa');
-    const coinsSpan = document.getElementById('coins');
-    const snowContainer = document.getElementById('snow');
+/* --------- LOADING SIMULATION --------- */
+setTimeout(() => {
+    document.getElementById("loadingScreen").style.display = "none";
+    document.getElementById("nicknameScreen").style.display = "flex";
+}, 1500);
 
-    // Монети
-    let coins = 0;
+/* --------- START GAME --------- */
+document.getElementById("startBtn").onclick = () => {
+    let nick = document.getElementById("nicknameInput").value.trim();
+    if (nick === "") nick = "Player";
 
-    // Показати екран ніку після лоадінгу
-    setTimeout(() => {
-        nameScreen.style.visibility = "visible";
-        nameScreen.style.opacity = "1";
-        // приховати loading (анімація в CSS вже є)
-        loadingScreen.style.display = "none";
-    }, 2500);
+    document.getElementById("nicknameDisplay").innerText = nick;
 
-    // Кнопка старт
-    startBtn.addEventListener('click', () => {
-        const nick = nameInput.value.trim();
-        if (!nick) return; // не починаємо без ніка
+    document.getElementById("nicknameScreen").style.display = "none";
+    document.getElementById("gameScreen").style.display = "block";
+};
 
-        nicknameDisplay.textContent = nick;
+/* --------- CLICKER LOGIC (FIXED) --------- */
+let coins = 0;
 
-        // приховуємо екран ніку, показуємо гру
-        nameScreen.style.opacity = "0";
-        nameScreen.style.visibility = "hidden";
+document.getElementById("clicker").onclick = () => {
+    coins++;
+    document.getElementById("coinCount").innerText = coins;
+};
 
-        gameScreen.style.visibility = "visible";
-        gameScreen.style.opacity = "1";
-    });
+/* --------- BEAUTIFUL SOFT SNOW --------- */
+function createSnow() {
+    const snow = document.getElementById("snow");
 
-    // Логіка кліку по санті: +1 монета
-    function giveCoin(amount = 1) {
-        coins += amount;
-        coinsSpan.textContent = coins;
+    for (let i = 0; i < 25; i++) {
+        let flake = document.createElement("div");
+        flake.className = "snowflake";
+        flake.textContent = "❄";
+
+        flake.style.left = Math.random() * 100 + "vw";
+        flake.style.fontSize = (Math.random() * 12 + 10) + "px";
+        flake.style.animationDuration = (Math.random() * 5 + 5) + "s";
+        flake.style.opacity = Math.random() * 0.8 + 0.2;
+
+        snow.appendChild(flake);
+
+        setTimeout(() => flake.remove(), 11000);
     }
+}
 
-    // Підтримка кліка та touch
-    function pressAnim() {
-        santa.style.transform = "translate(-50%, -50%) scale(0.93)";
-        setTimeout(() => santa.style.transform = "translate(-50%, -50%) scale(1)", 120);
-    }
-
-    santa.addEventListener('click', () => {
-        giveCoin(1);
-        pressAnim();
-    });
-
-    // Також обробимо touchstart для швидшої реакції на мобільних
-    santa.addEventListener('touchstart', (e) => {
-        e.preventDefault(); // уникаємо дублювання події на деяких пристроях
-        giveCoin(1);
-        pressAnim();
-    }, {passive: false});
-
-    // Сніг: м'який, не густий
-    function createSnow() {
-        for (let i = 0; i < 18; i++) {
-            const flake = document.createElement('div');
-            flake.className = 'snowflake';
-            flake.textContent = '❄';
-
-            const left = Math.random() * 100;
-            const size = Math.random() * 14 + 8; // 8..22px
-            const duration = Math.random() * 6 + 6; // 6..12s
-            const delay = Math.random() * 3; // невеликий строб
-
-            flake.style.left = left + 'vw';
-            flake.style.fontSize = size + 'px';
-            flake.style.opacity = (Math.random() * 0.6 + 0.3).toFixed(2);
-            flake.style.animationDuration = duration + 's';
-            flake.style.animationDelay = delay + 's';
-
-            snowContainer.appendChild(flake);
-
-            // прибрати елемент після завершення анімації
-            setTimeout(() => {
-                flake.remove();
-            }, (duration + delay) * 1000 + 500);
-        }
-    }
-
-    // старт снігу
-    createSnow();
-    setInterval(createSnow, 1400);
+setInterval(createSnow, 1200);
+createSnow();
 </script>
+
 </body>
 </html>
