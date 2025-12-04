@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>New Year Brawl Clicker</title>
+
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body, html {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+    }
+
+    /* -------------------- LOADING SCREEN -------------------- */
+    #loadingScreen {
+        position: fixed;
+        inset: 0;
+        background: #3a3a3a;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 32px;
+        font-family: "Courier New", monospace;
+        animation: fadeout 0.5s ease forwards;
+        animation-delay: 2.5s;
+        z-index: 10;
+    }
+
+    @keyframes fadeout {
+        to { opacity: 0; visibility: hidden; }
+    }
+
+    /* -------------------- NICKNAME SCREEN -------------------- */
+    #nameScreen {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #1d1d1d;
+        color: white;
+        gap: 20px;
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.5s;
+        z-index: 9;
+    }
+
+    #nameInput {
+        padding: 12px 18px;
+        font-size: 18px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+    }
+
+    #startBtn {
+        padding: 12px 25px;
+        font-size: 18px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+    }
+
+    /* -------------------- MAIN GAME SCREEN -------------------- */
+    #gameScreen {
+        position: fixed;
+        inset: 0;
+        background: #0d47a1; /* красивий синій */
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.5s;
+    }
+
+    /* Нік у лівому верхньому куті */
+    #nicknameDisplay {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        font-size: 26px;
+        font-weight: bold;
+        color: white;
+    }
+
+    /* Монета зверху по центру */
+    #coinBox {
+        position: absolute;
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 28px;
+        font-weight: bold;
+        color: white;
+    }
+
+    #coinBox img {
+        width: 40px;
+        height: 40px;
+    }
+
+    /* Санта-пін по центру */
+    #santa {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 230px;
+        user-select: none;
+        cursor: pointer;
+    }
+
+    /* -------------------- CSS SNOW -------------------- */
+    .snow {
+        position: fixed;
+        pointer-events: none;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image:
+            radial-gradient(white 1px, transparent 1px),
+            radial-gradient(white 1px, transparent 1px),
+            radial-gradient(white 2px, transparent 2px);
+        background-size: 3px 3px, 6px 6px, 4px 4px;
+        animation: snowfall 12s linear infinite;
+        opacity: 0.8;
+    }
+
+    @keyframes snowfall {
+        0% { background-position: 0 0, 0 0, 0 0; }
+        100% { background-position: 0 1000px, 0 600px, 0 800px; }
+    }
+</style>
+</head>
+<body>
+
+<!-- ========== LOADING SCREEN ========== -->
+<div id="loadingScreen">Loading...</div>
+
+<!-- ========== NICKNAME INPUT SCREEN ========== -->
+<div id="nameScreen">
+    <h2>Enter Nickname</h2>
+    <input id="nameInput" placeholder="Your nickname">
+    <button id="startBtn">Start</button>
+</div>
+
+<!-- ========== MAIN GAME SCREEN ========== -->
+<div id="gameScreen">
+    <div class="snow"></div>
+
+    <div id="nicknameDisplay"></div>
+
+    <div id="coinBox">
+        <img src="coin.png" alt="">
+        <span id="coins">0</span>
+    </div>
+
+    <img id="santa" src="stu_santa_pin.png" alt="">
+</div>
+
+<script>
+    let coins = 0;
+
+    // Після лоадінгу показуємо екран ніку
+    setTimeout(() => {
+        nameScreen.style.visibility = "visible";
+        nameScreen.style.opacity = "1";
+    }, 2500);
+
+    // Запуск гри
+    startBtn.onclick = () => {
+        const nick = nameInput.value.trim();
+        if (!nick) return;
+
+        nicknameDisplay.textContent = nick;
+
+        nameScreen.style.opacity = "0";
+        nameScreen.style.visibility = "hidden";
+
+        gameScreen.style.visibility = "visible";
+        gameScreen.style.opacity = "1";
+    };
+
+    // Клік по піну Санти
+    santa.onclick = () => {
+        coins++;
+        document.getElementById("coins").textContent = coins;
+        santa.style.transform = "translate(-50%, -50%) scale(0.93)";
+        setTimeout(() => {
+            santa.style.transform = "translate(-50%, -50%) scale(1)";
+        }, 120);
+    };
+</script>
+
+</body>
+</html>
